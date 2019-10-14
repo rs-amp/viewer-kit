@@ -1,0 +1,19 @@
+<li>
+    <model-viewer src="https://client_23.q.bigcontent.io/v1/static/{{model.name}}" 
+    background-color="white"
+    autoplay="true"
+
+    {{#if model.usdz}}
+    ios-src="https://client_23.q.bigcontent.io/v1/static/{{model.usdz}}" 
+    {{/if}}
+
+    {{#if model.src}}
+    poster="{{model.src}}"
+    preload
+    reveal-when-loaded
+    {{/if}}
+
+    alt="{{model.name}}" auto-rotate camera-controls background-color="#455A64" ar>
+
+    </model-viewer>
+</li>

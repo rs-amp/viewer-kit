@@ -85,6 +85,44 @@
             });
     };
 
+    function preprocessModels(set) {
+        //this function finds model related assets and groups them together.
+        //typically an AR model has three components
+        // - <name>.gltf / <name>.glb (has gltf mimetype)
+        // - <name>-ios.usdz (optional, for iOS AR, has usdz mimetype)
+        // - <name>-thumb.png (optional, thumbnail for asset, has image type)
+
+        //first step is to find all gltf models in the set
+        var gltfs = set.filter(function(item) { return item.mimeType === 'model/gltf-binary' || item.mimeType === 'model/gltf+json'});
+        //ok, now find all usdz/thumb files and link them to the gltf with the same name
+        //when this is done, their standalone entry is deleted from the set
+        for (var i=0; i<set.length; i++) {
+            var item = set[i];
+            if (item.type === 'img') {
+                //does its name match a gltf model?
+                var name = item.src;
+                var lastSlash = name.lastIndexOf('/');
+                if (lastSlash !== -1) {
+                    name = name.substr(lastSlash+1);
+                }
+                var gltf = gltfs.find(function(target) { return name === target.name + '-thumb' });
+                if (gltf != null) {
+                    //add thumb to gltf model, and remove this set item
+                    gltf.src = item.src;
+                    set.splice(i--, 1);
+                }
+            } else if (item.mimeType === 'model/vnd.pixar.usd' || item.mimeType === 'model/vnd.usdz+zip') {
+                //does its name match a gltf model?
+                var gltf = gltfs.find(function(target) { return item.name === target.name + '-ios' });
+                if (gltf != null) {
+                    //add thumb to gltf model, and remove this set item
+                    gltf.usdz = item.name;
+                    set.splice(i--, 1);
+                }
+            }
+        }
+    }
+
     Viewer.prototype.initSetData = function () {
         var self = this;
         var page = self.bridgeConnector.page;
@@ -235,6 +273,7 @@
 
     Viewer.prototype.renderInitialView = function () {
         var self = this;
+        preprocessModels(self.assets);
         self.currentView = self.isMobile() ? self.views.mobileNormalView : self.views.desktopNormalView;
         self.renderView(self.currentView);
     };

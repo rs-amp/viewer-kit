@@ -5,6 +5,10 @@
     <meta charset='UTF-8'>
     <title>Viewer Kit Example</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+    
     <!-- build:[href] css/viewer.min.css -->
     <link rel="stylesheet" href="../dist/css/viewer.css">
     <!-- /build -->
@@ -54,9 +58,9 @@
 <script>
     $(function () {
         var viewer = new amp.Viewer({
-            client: 'playground',
-            imageBasePath: '//i1.adis.ws/',
-            set: 'viewer_kit_set',
+            client: 'Client_23',
+            imageBasePath: '//i1-qa.adis.ws/',
+            set: 'test_model_set',
             locale: 'en-gb',
             cacheControl: Date.now(),
             secure: true,

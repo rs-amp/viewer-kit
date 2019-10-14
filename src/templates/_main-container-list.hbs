@@ -9,6 +9,8 @@
         {{else}}
             {{#if media}}
                 {{renderPartial 'main-container-list-video' video=this templates=../templates locale=../locale}}
+            {{else if (startsWith mimeType 'model')}}
+                {{renderPartial 'main-container-list-model' model=this templates=../templates locale=../locale}}
             {{else}}
                 {{renderPartial 'main-container-list-image' image=this templates=../templates locale=../locale}}
             {{/if}}

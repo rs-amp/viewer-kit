@@ -14,5 +14,8 @@
         }
         return new Handlebars.SafeString( partial(options.hash) );
     });
-    
+
+    Handlebars.registerHelper('startsWith', function(string, start) {
+        return (string || '').startsWith(start);
+    });
 }(window));
