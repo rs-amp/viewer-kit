@@ -317,6 +317,7 @@
         self.bindAmpEvents();
         self.bindNavigationEvents();
         self.bindSpinEvents();
+        self.bindModelEvents();
 
         self.initImagesSrcset();
         self.initAmpWidgets(spinManipulate);
@@ -683,9 +684,11 @@
             self.initSpinTooltip(spin3D);
         } else if (currentAsset.hasOwnProperty('media')) {
             self.initVideoTooltip();
+        } else if (currentAsset.type === 'static' && currentAsset.mimeType.startsWith('model')) {
+            self.init3DTooltip();
         } else {
             self.initImageTooltip();
-        }
+        } 
     };
 
     Viewer.prototype.initImageTooltip = function () {
@@ -780,6 +783,12 @@
 
         self.fadeOutTooltip();
     };
+
+    Viewer.prototype.init3DTooltip = function () {
+        var self = this;
+
+        self.tooltip.attr({class: 'tooltip model'});
+    }
 
     Viewer.prototype.fadeOutTooltip = function () {
         var self = this;
@@ -929,6 +938,20 @@
             spinTraps.css({display: 'none'});
         }
     };
+
+    Viewer.prototype.bindModelEvents = function () {
+        var self = this;
+        var viewers = self.mainContainerList.find('model-viewer');
+        if (self.canTouch) { 
+            Array.from(viewers).forEach(function (viewer) {
+                var $viewer = $(viewer);
+                $viewer.parent().on('touchmove', function(e) { 
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+        }
+    }
 
     Viewer.prototype.bindZoomEvents = function (zoomAction) {
         var self = this;

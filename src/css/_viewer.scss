@@ -191,6 +191,10 @@ body {
           }
         }
 
+        &.model {
+          display: none;
+        }
+
         &.video {
           width: 90px;
           height: 90px;
